@@ -9,6 +9,7 @@ import 'package:ovoshi/application/products_bloc/products_bloc.dart';
 import 'package:ovoshi/providers/cart.dart';
 import 'package:ovoshi/presentation/screens/overview/badge.dart';
 import 'package:ovoshi/presentation/screens/overview/product_grid_view.dart';
+import 'package:ovoshi/presentation/widgets/curved_nav_bar.dart';
 
 //import 'package:ovoshi/screens/cart/cart_screen.dart';
 //import 'package:ovoshi/widgets/app_drawer.dart';
@@ -21,6 +22,8 @@ enum FilterOptions {
 
 // Product overview screen
 class ProductOverviewScreen extends StatefulWidget {
+  // Route name
+  static const routeName = '/product_overview';
   @override
   _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
 }
@@ -28,28 +31,14 @@ class ProductOverviewScreen extends StatefulWidget {
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   // var showFavorite = false;
   bool _isInit = true;
-  bool _isLoading = false;
+
+  // Curved navbar
+  GlobalKey _bottomNavigationKey = GlobalKey();
 
   // Like init but with context
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      /*
-      // Set loading state
-      setState(() {
-        _isLoading = true;
-      });
-      // Fetch products
-      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
-        // Set loaded state
-        setState(() {
-          _isLoading = false;
-        });
-      }).catchError((error) {
-        // Print errors
-        print(error);
-      });
-      */
       BlocProvider.of<ProductsBloc>(context).add(FetchProducts());
       _isInit = false;
     }
@@ -116,13 +105,18 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
 
-      //drawer: AppDrawer(),
-
       // Good place for BlocBuilder
       body: BlocBuilder<ProductsBloc, ProductsState>(
         builder: (context, state) {
           if (state is ProductsLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Container(
+              color: Theme.of(context).backgroundColor,
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                ),
+              ),
+            );
           }
           if (state is ProductsLoaded) {
             return ProductGridView(state.items, false);
@@ -141,6 +135,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       /*_isLoading
           ? Center(child: CircularProgressIndicator())
           : ProductGridView(showFavorite),*/
+
+      // Drawer bar
+      //drawer: AppDrawer(),
+
+      // Navigation bar
+      bottomNavigationBar:
+          CurvedNavBar(bottomNavigationKey: _bottomNavigationKey),
     );
   }
 }

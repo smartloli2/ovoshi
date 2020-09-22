@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:ovoshi/infrastructure/repositories/product_repository.dart';
 import 'package:ovoshi/infrastructure/repositories/user_repository.dart';
-import 'package:ovoshi/providers/product.dart';
+import 'package:ovoshi/domain/entities/product.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';

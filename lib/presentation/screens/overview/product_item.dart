@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-
+import 'package:ovoshi/application/product_bloc/product_notifier.dart';
+import 'package:ovoshi/presentation/screens/detail/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ovoshi/application/authentication_bloc/authentication_bloc.dart';
-import 'package:ovoshi/providers/product.dart';
+import 'package:ovoshi/domain/entities/product.dart';
 //import 'package:ovoshi/screens/product_detail/product_detail_screen.dart';
 
 // Single product item
 class ProductItem extends StatelessWidget {
-  // final String id;
-  // final String title;
-  // final String imageUrl;
-  // ProductItem(this.id, this.title, this.imageUrl);
+  // Product entity
+  final Product product;
 
-  // Build witget
+  ProductItem({this.product});
+
   @override
   Widget build(BuildContext context) {
+    // print('build item');
     // Getting providers
-    final product = Provider.of<Product>(context, listen: false);
+    // final product = Provider.of<Product>(context, listen: false);
     // final cart = Provider.of<CartProvider>(context, listen: false);
     // final auth = Provider.of<Auth>(context, listen: false);
 
@@ -28,7 +28,10 @@ class ProductItem extends StatelessWidget {
       // Set the tap detector
       child: InkWell(
         // on tap we go to detail page
-        onTap: () => {print('tap on product')},
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(ProductDetailScreen.routeName, arguments: product);
+        },
         /*Navigator.of(context)
             .pushNamed(ProductDetailScreen.routeName, arguments: product.id),*/
 
@@ -44,20 +47,16 @@ class ProductItem extends StatelessWidget {
           header: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Consumer<AuthenticationBloc>(
-                builder: (context, authBloc, child) => IconButton(
+              Consumer<ProductBloc>(
+                builder: (context, value, _) => IconButton(
                   icon: product.isFavorite
                       ? Icon(Icons.favorite)
                       : Icon(Icons.favorite_border),
 
                   // Setting up a click listener
                   onPressed: () async {
-                    // Use method from product provider to manage the fav status
-                    // TODO: conver to event "toggleFavoriteStatus"
-                    await product.toggleFavoriteStatus(
-                      authBloc.token,
-                      authBloc.userId,
-                    );
+                    await Provider.of<ProductBloc>(context, listen: false)
+                        .toggleFavoriteStatus(product);
                   },
                   color: Theme.of(context).accentColor,
                 ),

@@ -8,6 +8,7 @@ import 'package:ovoshi/presentation/widgets/curved_widget.dart';
 
 // Login page
 class LoginScreen extends StatelessWidget {
+  static const routeName = '/login_screen';
   // User repos
   final UserRepository _userRepository;
   // Constr-r
@@ -73,12 +74,11 @@ class LoginScreen extends StatelessWidget {
                 // Form widget
                 Container(
                   margin: const EdgeInsets.only(top: 230),
-                  child:
-                      // Login form
-                      LoginForm(
+                  // Login form
+                  child: LoginForm(
                     userRepository: _userRepository,
                   ),
-                )
+                ),
               ],
             ),
           ),

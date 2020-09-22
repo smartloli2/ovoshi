@@ -5,6 +5,8 @@ import 'package:ovoshi/application/authentication_bloc/authentication_bloc.dart'
 import 'package:ovoshi/application/authentication_bloc/authentication_event.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routeName = '/home_screen';
+
   /// final FirebaseUser user;
   /// const HomeScreen({Key key, this.user}) : super(key: key);
   const HomeScreen({Key key}) : super(key: key);

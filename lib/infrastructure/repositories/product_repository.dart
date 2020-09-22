@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:ovoshi/providers/product.dart';
+import 'package:ovoshi/domain/entities/product.dart';
 import 'package:ovoshi/domain/exceptions/http_exception.dart';
 
 class ProductRepository {
@@ -50,10 +50,12 @@ class ProductRepository {
     return [..._items];
   }
 
+  // Get favorite products
   List<Product> get favoriteItems {
     return _items.where((element) => element.isFavorite).toList();
   }
 
+  // Find product by id
   Product findById(String id) {
     return _items.firstWhere((element) => element.id == id);
   }
@@ -140,6 +142,32 @@ class ProductRepository {
       throw error;
     }
     return;
+  }
+
+  // Change favorite status
+  Future<void> toggleFavoriteStatus(
+    Product product,
+  ) async {
+    // Try change favorite status
+    final url =
+        'https://flutter-shop-apps.firebaseio.com/userFavorites/$userId/${product.id}.json?auth=$token';
+    try {
+      // Put requst
+      final response = await http.put(
+        url,
+        body: json.encode(
+          product.isFavorite,
+        ),
+      );
+
+      // If response is error
+      if (response.statusCode >= 400) {
+        // Return old value
+        throw HttpException('Bad request: ${response.statusCode}');
+      }
+    } catch (_) {
+      throw HttpException('Bad request');
+    }
   }
 
   // Update product

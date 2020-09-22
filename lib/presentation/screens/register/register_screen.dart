@@ -7,6 +7,9 @@ import 'package:ovoshi/presentation/screens/register/register_form.dart';
 import 'package:ovoshi/presentation/widgets/curved_widget.dart';
 
 class RegisterScreen extends StatelessWidget {
+  // Route name
+  static const routeName = '/register_screen';
+  // Repos
   final UserRepository _userRepository;
 
   const RegisterScreen({Key key, UserRepository userRepository})
